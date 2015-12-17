@@ -18,12 +18,18 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe utilitária para estabelecer conexão, baixar e manipular uma resposta JSON.
+ * Usada numa Thread separada, estabelece a conexão, cria um objeto JSON a partir da URL,
+ * e gera a List<Livros> a partir do objeto JSON(Que contem os livros).
+ */
 public class LivroHttp {
 
     public static final String LIVROS_URL_JSON =
             "https://raw.githubusercontent.com/nglauber/" +
                     "dominando_android/master/livros_novatec.json";
 
+    //Configura e realiza a conexão...
     private static HttpURLConnection connectar(String urlArquivo) throws IOException {
         final int SEGUNDOS = 1000;
         URL url = new URL(urlArquivo);
@@ -44,6 +50,14 @@ public class LivroHttp {
         return (info != null && info.isConnected());
     }
 
+    /**
+     * Faz uso de métodos para converter os bytes recebidos para uma String, e gerar também
+     * uma lista de livros, a partir de um objeto JSONObject.
+     * @return Lista de livros, a partir de um JSON de livros.
+     *
+     * @see LivroHttp#bytesParaString(InputStream)
+     * @see LivroHttp#lerJsonLivros(JSONObject)
+     */
     public static List<Livro> carregarLivrosJson() {
         try {
             HttpURLConnection conexao = connectar(LIVROS_URL_JSON);
@@ -60,6 +74,7 @@ public class LivroHttp {
         return null;
     }
 
+    //Faz o "parse" de JSON para livro, gerando uma lista de livros...
     public static List<Livro> lerJsonLivros(JSONObject json) throws JSONException {
         List<Livro> listaDeLivros = new ArrayList<Livro>();
 
